@@ -9,6 +9,7 @@ class Controlador extends CI_Controller{
 
 public function index(){ //cada metodo tiene una vista 
 	$data['contenido']='contenido';
+	$data ['calendario'] = $this->calendar->generate();
          $data['mensaje']="inicio";
 	
 	$this->load->view('plantilla3Her', $data);
@@ -16,11 +17,11 @@ public function index(){ //cada metodo tiene una vista
 
 	}
         
-        public function logCajero(){ //cada metodo tiene una vista 
+public function logCajero(){ 
 	$data['contenido']='loginCajero';
          $data['mensaje']="login";
 	
-	$this->load->view('loginCajero', $data);
+	$this->load->view('cajero/loginCajero', $data);
 	
 
 	}

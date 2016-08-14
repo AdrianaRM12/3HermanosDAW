@@ -3,7 +3,9 @@
 <html>
  
 	<head>
-        <center> <a href= class="image featured"><img src="<?php echo base_url();?>css/images/h.png"align="left"  /></a> </center>
+        <center> 
+			<a href= class="image featured"><img src="<?php echo base_url();?>css/images/h.png"align="left"  /></a> <br><br>
+		</center>
 		
         <br><br>
         <title>Administrador</title>
@@ -15,7 +17,7 @@
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 
 
-     <link rel="shortcut icon" href="<?php echo base_url();?>css/image/3hermanos.ico">
+		<link rel="shortcut icon" href="<?php echo base_url();?>css/image/3hermanos.ico">
 
 
 	</head>
@@ -27,45 +29,42 @@
 					<div class="container">
 
 						<!-- Header -->
-			<header id="header">
+							<header id="header">
 								<div class="inner">
 
 									<!-- Logo -->
-                                                                       
-                                                                        <h1 align=center>Agregar <br>Vendedor</h1> <br> <br>
-                                                                        <br>
-                                                                   
-                                                         <nav id="nav">
-											<ul>
-                                                                                            
-                                                                                           
-    <li><a href="<?php echo base_url();?>index.php/Usuario/logueado"> Inicio</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Usuario/getUsuario">Usuarios</a></li> 
-    <li><a href="<?php echo base_url();?>index.php/producto/getproducto"> Calzado</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Venta/getVenta"> Venta</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Cajero/getCajero">Cajero</a></li> 
-    <li><a href="<?php echo base_url();?>index.php/Marca/getMarca">Marcas</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Proveedor/getProveedor">Proveedor</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Vendedor/getVendedor">Vendedor</a></li> 
-    <li><a href="<?php echo base_url();?>index.php/Cliente/getCliente">Cliente</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Apartado/getApartado">Apartado</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Categoria/getCategoria">Categoria</a></li>		
+                                        <h1 align=center>Agregar <br>Vendedor</h1><br>
+                                            <nav id="nav">
+												<ul>
+                                                                                    
+													<li><a href="<?php echo base_url();?>index.php/Usuario/logueado"> Inicio</a></li>
+													<li><a href="<?php echo base_url();?>index.php/Usuario/getUsuario">Usuarios</a></li> 
+													<li><a href="<?php echo base_url();?>index.php/producto/getproducto"> Calzado</a></li>
+													<li><a href="<?php echo base_url();?>index.php/Venta/getVenta"> Venta</a></li>
+													<li><a href="<?php echo base_url();?>index.php/Cajero/getCajero">Cajero</a></li> 
+													<li><a href="<?php echo base_url();?>index.php/Marca/getMarca">Marcas</a></li>
+													<li><a href="<?php echo base_url();?>index.php/Proveedor/getProveedor">Proveedor</a></li>
+													<li><a href="<?php echo base_url();?>index.php/Vendedor/getVendedor">Vendedor</a></li> 
+													<li><a href="<?php echo base_url();?>index.php/Cliente/getCliente">Cliente</a></li>
+													<li><a href="<?php echo base_url();?>index.php/Apartado/getApartado">Apartado</a></li>
+													<li><a href="<?php echo base_url();?>index.php/Categoria/getCategoria">Categoria</a></li>		
 											
-											</ul>
-										</nav>         
+												</ul>
+											</nav>         
 
 								</div>
 							</header>
-                                                <body>
+    <body>
 
-<form action="<?php echo base_url();?>index.php/vendedor/addVendedor" method="post">
-<h3>Nombre:</h3><input title="Escribe un NOMBRE"type="text" name="nombre"required/><br>
-<input type="submit" value="Guardar">
-</form>
+		<form action="<?php echo base_url();?>index.php/vendedor/addVendedor" method="post">
+			<label><h3>Nombre:</h3></label>
+			<?php echo form_error('nombre','<div class = "error">','</div>');?>
+			<input type="text" name="nombre"><br>
+			
+			<input type="submit" value="Guardar">
+		</form>
 
-
-                                                </body>		<!-- Footer Wrapper -->
-				
+	</body>		
 		
 		<!-- Scripts -->
 

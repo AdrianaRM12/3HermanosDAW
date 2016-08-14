@@ -21,6 +21,14 @@ class Cajero extends CI_Controller {
     
 
     public function addCajero(){
+	$this->form_validation->set_rules('nombre','Nombre','trim|required|is_unique[cajero.Nombre]');
+
+	
+		if($this->form_validation->run() === false){
+			$this->load->view('admin/cajero/agrCajero');
+		
+		}else{
+	
         $nom = $this->input->post('nombre');
        
         $this->Cajero_model->addCajero($nom);
@@ -28,7 +36,8 @@ class Cajero extends CI_Controller {
 
         redirect('cajero/getCajero');
         
-    }
+		}
+	}
 //------------------------------------------Actualizar cajero----------------------------//
   public function actCajero($id=null){
         
@@ -39,17 +48,29 @@ class Cajero extends CI_Controller {
     }
  
  
-    public function upCajero(){
-		$id = $this->input->post('id');
-        $nom = $this->input->post('nombre');
-       
-        
-        $this->Cajero_model->upCajero($id, $nom);
-        
-       redirect('cajero/getCajero');
+    public function upCajero($id=null){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required');
+	$id = $this->input->post('id');
+
+	
+		if($this->form_validation->run() === false){
+			$data['cajero']= $this->Cajero_model->getCajero($id);
+			$this->load->view('admin/cajero/frmUpCajero', $data);
+		
+		}else{
+
+			$id = $this->input->post('id');
+			$nom = $this->input->post('nombre');
+		   
+			
+			$this->Cajero_model->upCajero($id, $nom);
+			
+		   redirect('cajero/getCajero');
 	  
         
-    }
+		}
+	}
 //------------------------------------------Eliminar cajero----------------------------//
     public function delCajero($id){
         $this->Cajero_model->delCajero($id);

@@ -1,132 +1,52 @@
-<!DOCTYPE HTML>
+<?php $this->load->view('plantilla3HerAdmin/head'); ?>
+<?php $this->load->view('plantilla3HerAdmin/nav2'); ?>
 
-<html>
+	<div class="container"><br><br>
+		<center><h1>Actualizar Calzado</h1></center>
+		
+			<div class="row">
+				<div class="col-xs-12 col-sm-10">
+
+					<form class="form-horizontal well" action="<?php echo base_url();?>index.php/producto/actProducto" method="post">
+
+					<?php foreach ($producto as $prod){ ?> 
+
+						<input type="hidden" name="id" value="<?php echo $prod->id_Calzado;?>"><br>
+						
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Nombre:</label>
+							<div class="col-xs-12 col-sm-6">
+								<?php echo form_error('nombre','<div class = "error">','</div>');?>
+								<input class="form-control" type="text" name="nombre" value="<?php echo $prod->Nombre;?>"><br>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Precio:</label>
+							<div class="col-xs-12 col-sm-6">
+								<?php echo form_error('precio','<div class = "error">','</div>');?>
+								<input class="form-control" type="text" name="precio" value="<?php echo $prod->Precio;?>"><br>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Decripción:</label>
+							<div class="col-xs-12 col-sm-6">
+								<?php echo form_error('descripcion','<div class = "error">','</div>');?>
+								<input class="form-control" type="text" name="descripcion" value="<?php echo $prod->Descripcion;?>"><br>
+							</div>
+						</div>
+						<input type="hidden" name="id_Categoria" value="<?php echo $prod->id_Categoria;?>"><br>
+						<input type="hidden" name="Stock" value="<?php echo $prod->Stock;?>"><br>
+						<input type="hidden" name="id_Marca" value="<?php echo $prod->id_Marca;?>"><br>
+						
+						<center><input type="submit" name="enviar" value="Guardar"></center><br>
+
+						
+						<?php }?> 
+						
+					</form>
+				</div>
+			</div>
+	</div>
+
+ <?php $this->load->view('plantilla3HerAdmin/footer'); ?>
  
-	<head>
-                <center> <a href= class="image featured"><img src="<?php echo base_url();?>css/images/h.png"align="left"  /></a> </center>
-		
-        <br><br>
-        
-		<title>Administrador</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="<?php echo base_url();?>css/main.css" />
-		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-
-
-     <link rel="shortcut icon" href="<?php echo base_url();?>css/image/3hermanos.ico">
-
-
-	</head>
-	<body class="homepage">
-		<div id="page-wrapper">
-
-			<!-- Header -->
-				<div id="header-wrapper">
-					<div class="container">
-
-						<!-- Header -->
-			<header id="header">
-								<div class="inner">
-
-									<!-- Logo -->
-                                                                       
-                                                                        <h1 align=center>Modificar <br>Calzado </h1> <br> <br>
-                                                                        <br>
-                                                                   
-                                                         <nav id="nav">
-											<ul>
-                                                                                            
-                                                                                            <li><a href="<?php echo base_url();?>index.php/Usuario/getUsuario">Usuarios</a></li>
-     <li><a href="<?php echo base_url();?>index.php/Usuario/logueado"> Inicio</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Usuario/getUsuario">Usuarios</a></li> 
-    <li><a href="<?php echo base_url();?>index.php/producto/getproducto"> Calzado</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Venta/getVenta"> Venta</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Cajero/getCajero">Cajero</a></li> 
-    <li><a href="<?php echo base_url();?>index.php/Marca/getMarca">Marcas</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Proveedor/getProveedor">Proveedor</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Vendedor/getVendedor">Vendedor</a></li> 
-    <li><a href="<?php echo base_url();?>index.php/Cliente/getCliente">Cliente</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Apartado/getApartado">Apartado</a></li>
-	<li><a href="<?php echo base_url();?>index.php/Categoria/getCategoria">Categoria</a></li>		
-											</ul>
-										</nav>         
-
-								</div>
-							</header>
-                                                <body>
-
-<form action="<?php echo base_url();?>index.php/producto/actProducto" method="post">
-
-<?php foreach ($producto as $prod){ ?> 
-
-	<input type="hidden" name="id" 
-		value="<?php echo $prod->id_Calzado;?>"><br>
-	
-	<label><h3>Nombre: </h3></label><br>
-	<input type="text" name="nombre"
-		value="<?php echo $prod->Nombre;?>"><br>
-
-	<label><h3>Precio: </h3></label><br>
-	<input type="text" name="precio"
-		value="<?php echo $prod->Precio;?>"><br>
-	
-	<label><h3>Decripción: </h3></label><br>
-	<input type="text" name="descripcion"
-	value="<?php echo $prod->Descripcion;?>"><br>
-	
-	
-	<input type="submit" name="enviar" value="enviar"><br>
-
-	
-	<?php }?> 
-	
-</form>
-
-                                                </body>		<!-- Footer Wrapper -->
-				
-		
-		<!-- Scripts -->
-
-			<script src="<?php echo base_url();?>js/jquery.min.js"></script>
-			<script src="<?php echo base_url();?>js/jquery.dropotron.min.js"></script>
-			<script src="<?php echo base_url();?>js/skel.min.js"></script>
-			<script src="<?php echo base_url();?>js/skel-viewport.min.js"></script>
-			<script src="<?php echo base_url();?>js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="<?php echo base_url();?>js/main.js"></script>
-
-	</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

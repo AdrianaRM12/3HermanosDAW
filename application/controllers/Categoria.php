@@ -21,6 +21,15 @@ class Categoria extends CI_Controller {
     
 
     public function addCategoria(){
+	
+	$this->form_validation->set_rules('nombre','Total','trim|required|is_unique[categoria.Nombre]');
+	
+	
+		if($this->form_validation->run() === false){
+			$this->load->view('admin/categoria/agrCategoria');
+		
+		}else{
+	
         $nom = $this->input->post('nombre');
 		$des = $this->input->post('descripcion');
 		
@@ -32,7 +41,8 @@ class Categoria extends CI_Controller {
 
         redirect('categoria/getCategoria');
         
-    }
+		}
+	}
 //------------------------------------------Actualizar categoria----------------------------//
   public function actCategoria($id=null){
         
@@ -44,6 +54,15 @@ class Categoria extends CI_Controller {
  
  
     public function upCategoria(){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required');
+	$id = $this->input->post('id');
+	
+		if($this->form_validation->run() === false){
+			$data['categoria']= $this->Categoria_model->getCategoria($id);
+			$this->load->view('admin/categoria/frmUpCategoria', $data);
+		
+		}else{
 		$id = $this->input->post('id');
         $nom = $this->input->post('nombre');
 		$desc= $this->input->post('desc');
@@ -56,7 +75,8 @@ class Categoria extends CI_Controller {
        redirect('categoria/getCategoria');
 	  
         
-    }
+		}
+	}
 //------------------------------------------Eliminar categoria----------------------------//
     public function delCategoria($id){
         $this->Categoria_model->delCategoria($id);

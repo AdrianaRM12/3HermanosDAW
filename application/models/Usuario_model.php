@@ -10,6 +10,7 @@ class Usuario_model extends CI_Model{
     public function getUsuario($id = null){
         $this->db->select('*');
         $this->db->from('usuario');
+		$this->db->order_by('username','asc');
         if($id != null){
             $this->db->where('idUsuario', $id);
         }
@@ -61,15 +62,18 @@ class Usuario_model extends CI_Model{
         $this->db->select('*');
         $this->db->from('Usuario');
         $this->db->where('username', $user);
-        $this->db->where('password', $pass);
+         
+		
         
         $sql = $this->db->get();
         
-        if($sql->num_rows()>0){
+        if($sql->num_rows()>0 and ($this->encrypt->decode($sql->row()->password)== $pass)){
             return $sql->row();
         }else{
             return null;
         }
+		
+	
     }
 }//Fin class
 

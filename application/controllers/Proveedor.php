@@ -21,6 +21,17 @@ class Proveedor extends CI_Controller {
     
 
     public function addProveedor(){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required|is_unique[marca.Nombre]');
+	$this->form_validation->set_rules('tel','Telefono','trim|required');
+	$this->form_validation->set_rules('direccion','Direccion','trim|required');
+
+	
+		if($this->form_validation->run() === false){
+			$this->load->view('admin/proveedor/agrProveedor');
+		
+		}else{
+	
         $nom = $this->input->post('nombre');
 		$tel = $this->input->post('tel');
 		$dir = $this->input->post('direccion');
@@ -32,7 +43,8 @@ class Proveedor extends CI_Controller {
 
         redirect('proveedor/getProveedor');
         
-    }
+		}
+	}
 //------------------------------------------Actualizar proveedor----------------------------//
   public function actProveedor($id=null){
         
@@ -44,6 +56,19 @@ class Proveedor extends CI_Controller {
  
  
     public function upProveedor(){
+	$this->form_validation->set_rules('nombre','Nombre','trim|required');
+	$this->form_validation->set_rules('tel','Telefono','trim|required');
+	$this->form_validation->set_rules('direccion','Direccion','trim|required');
+	$this->form_validation->set_rules('idM','Marca','trim|required');
+	$id = $this->input->post('id');
+	
+	
+		if($this->form_validation->run() === false){
+			 $data['proveedor']= $this->Proveedor_model->getProveedor($id);
+			$this->load->view('admin/proveedor/frmUpProveedor', $data);
+		
+		}else{
+	
 		$id = $this->input->post('id');
         $nom = $this->input->post('nombre');
 		$tel = $this->input->post('tel');
@@ -56,7 +81,8 @@ class Proveedor extends CI_Controller {
        redirect('proveedor/getProveedor');
 	  
         
-    }
+		}
+	}
 //------------------------------------------Eliminar proveedor----------------------------//
     public function delProveedor($id){
         $this->Proveedor_model->delProveedor($id);

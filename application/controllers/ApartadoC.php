@@ -12,25 +12,38 @@ class ApartadoC extends CI_Controller {
 //------------------------------------------Obtener apartado----------------------------//
     public function getApartado($id = null){
         $data['apartado'] = $this->Apartado_model->getApartado($id);
-        $this->load->view('apartado',$data);
+        $this->load->view('cajero/apartado',$data);
     }
 //------------------------------------------Agregar apartado----------------------------//
     public function agrApartado(){
-        $this->load->view('admin/apartado/agrApartado');
+        $this->load->view('cajero/agreApartado');
     }
     
 
     public function addApartado(){
-        $totalA = $this->input->post('total');
-		$idC = $this->input->post('idCliente');
+	
+	$this->form_validation->set_rules('abono','Total','trim|required|numeric');
+	$this->form_validation->set_rules('totalA','Total a pagar', 'trim|required|numeric');
+	$this->form_validation->set_rules('idC','id del cliente','trim|required|numeric');
+	
+	
+	
+	if($this->form_validation->run() === false){
+			$this->load->view('cajero/agreApartado');
 		
-		
+		}else{
+	
+        $abono = $this->input->post('abono');
+		$total = $this->input->post('totalA');
+		$idC = $this->input->post('idC');
 		
        
-        $this->Apartado_model->addApartado($totalA, $idC);
+        $this->Apartado_model->addApartadoC($abono, $total, $idC);
         
 
-        redirect('apartado/getApartado');
+        redirect('apartadoC/getApartado');
+		
+		}
         
     }
 //------------------------------------------Actualizar apartado----------------------------//
@@ -38,12 +51,17 @@ class ApartadoC extends CI_Controller {
         
         $data['apartado']= $this->Apartado_model->getApartado($id);
         
-        $this->load->view('admin/apartado/frmUpApartado', $data);
+        $this->load->view('cajero/actApartado', $data);
         
     }
  
  
     public function upApartado(){
+	
+	
+	
+	
+	
 		$id = $this->input->post('id');
         $totalA = $this->input->post('AbonoT');
 		$idC = $this->input->post('idCliente');
@@ -53,9 +71,20 @@ class ApartadoC extends CI_Controller {
         
         $this->Apartado_model->upApartado($id, $totalA, $idC);
         
-       redirect('apartado/getApartado');
+       redirect('ApartadoC/getApartado');
 	  
         
+    }
+
+	
+//------------------------------------------Estado del apartado----------------------------//
+	
+	  public function cambiarStatus($id, $status){
+        $status = ($status == 0) ? 1 : 0;
+        
+        $this->Apartado_model->cambiarStatus($id, $status);
+        
+        redirect('ApartadoC/getApartado');
     }
 //------------------------------------------Eliminar apartado----------------------------//
     public function delApartado($id){
@@ -63,7 +92,7 @@ class ApartadoC extends CI_Controller {
         
 		
 		
-        redirect('apartado/getApartado');
+        redirect('apartadoC/getApartado');
 		
     }
     

@@ -20,28 +20,52 @@ class Apartado_model extends CI_Model{
             return $sql->result();
         }
     }
-//------------------------------------------Agregar apartado----------------------------//
-    public function addApartado($totalA, $idC){
+//------------------------------------------Agregar apartado ADMIN----------------------------//
+    public function addApartado($totalA, $totalAp, $idC, $fech){
         
        $data = array(
          'id_Apartado' => 0,
 		 'Abono_total' => $totalA,
-         'id_Cliente' => $idC
+		 'Total_AP' => $totalAp,
+         'id_Cliente' => $idC,
+		 'Fecha' => $fech
        
          
        );
         
-       return $this->db->insert('apartado', $data);
+		
+	   
+       return $this->db->insert('apartado', $data); 
+	      
+	  
+	   
+	   
+	   
+    }
+//------------------------------------------Agregar apartado CAJERO----------------------------//
+    public function addApartadoC($abono, $total, $idC){
+        
+       $data = array(
+         'id_Apartado' => 0,
+		 'Abono_total' => $abono,
+		 'Total_AP' => $total,
+         'id_Cliente' => $idC
+       
+         
+       );
+         
+       return $this->db->insert('apartado', $data); 
+	   
+	   
     }
 //------------------------------------------Actualizar apartado----------------------------//
-	 public function upApartado($id, $totalA, $idC){
+	 public function upApartado($id, $totalA, $totalAP, $idC){
        
        $data = array(
            'Abono_total' => $totalA,
+		   'Total_AP' => $totalAP,
            'id_Cliente' => $idC
           
-		   
-		   
        );
        $this->db->where('id_Apartado',$id);
        return $this->db->update('apartado', $data);
@@ -51,5 +75,43 @@ class Apartado_model extends CI_Model{
         $this->db->where('id_Apartado', $id);
         $this->db->delete('apartado');
     }
+	
+	
+//------------------------------------------Estado del apartado----------------------------//
+    public function cambiarStatus($id, $status){
+       $data = array(
+            'aStatus' => $status
+            );
+        $this->db->where('id_Apartado', $id);
+        $this->db->update('Apartado', $data);
+    }
+	
+//------------------------------------------Reportes ----------------------------// 
+
+	public function generarXML(){
+			$this->load->dbutil();
+			
+			$consulta = $this->db->get('apartado');
+			
+			$config = array (
+				'root' => 'Apartado',
+				'element' => 'apartado',
+				'newline' => "\n",
+				'tab'  => "\t"
+			);
+			
+			$xml = $this->dbutil->xml_from_result($consulta, $config);
+			return $xml;
+			
+			
+		}
+		
+	public function generarEXCEL(){
+		$fields = $this->db->field_data('apartado');
+		$this->db->order_by('fecha','asc');
+		$query =$this->db->get('apartado');	
+		return array("fields" => $fields, "query" => $query);
+	}	
+
 
 	}

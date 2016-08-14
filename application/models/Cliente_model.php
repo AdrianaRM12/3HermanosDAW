@@ -10,6 +10,7 @@ class Cliente_model extends CI_Model{
     public function getCliente($id = null){
         $this->db->select('*');
         $this->db->from('cliente');
+		$this->db->order_by('Nombre','asc');
         if($id != null){
             $this->db->where('id_Cliente', $id);
         }
@@ -46,6 +47,34 @@ class Cliente_model extends CI_Model{
        $this->db->where('id_Cliente',$id);
        return $this->db->update('cliente', $data);
     }
+//------------------------------------------Reportes ----------------------------// 
+
+	public function generarXML(){
+			$this->load->dbutil();
+			
+			$consulta = $this->db->get('cliente');
+			
+			$config = array (
+				'root' => 'Cliente',
+				'element' => 'cliente',
+				'newline' => "\n",
+				'tab'  => "\t"
+			);
+			
+			$xml = $this->dbutil->xml_from_result($consulta, $config);
+			return $xml;
+			
+			
+		}
+		
+	public function generarEXCEL(){
+		$fields = $this->db->field_data('cliente');
+		$this->db->order_by('Nombre','asc');
+		$query =$this->db->get('cliente');	
+		return array("fields" => $fields, "query" => $query);
+	}	
+
+	
 //------------------------------------------Borrar cliente----------------------------//
     public function delCliente($id){
         $this->db->where('id_Cliente', $id);

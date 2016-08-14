@@ -1,7 +1,38 @@
-<!--form action="usuario/addUsuario" method = "post"-->
-<?php echo form_open('usuario/addUsuario'); ?>
-    Usuario:<input type="text" name="username"><br>
-    Contraseña:<input type="text" name="password"><br>
-    Correo:<input type="text" name="email"><br>
-    <input type="submit" value="enviar">
-</form>
+<?php $this->load->view('plantilla3HerAdmin/head'); ?>
+<?php $this->load->view('plantilla3HerAdmin/nav2'); ?>
+	<div class="container"><br><br>
+		<center><h1>Agregar Usuario</h1></center>
+		
+			<div class="row">
+				<div class="col-xs-12 col-sm-10">
+					<form class="form-horizontal well" action="<?php echo base_url();?>index.php/usuario/addUsuario" method="post">
+
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Usuario:</label>
+							<div class="col-xs-12 col-sm-6">
+								<?php echo form_error('username','<div class = "error">','</div>');?>
+								<input class="form-control" type="text" name="username" value="<?php echo set_value('username');?>"><br>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Contraseña:</label>
+							<div class="col-xs-12 col-sm-6">
+								<?php echo form_error('password','<div class = "error">','</div>');?>
+								<input class="form-control" type="password" name="password" value="<?php echo set_value('password');?>"><br>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="" class="col-sm-3 control-label">Correo:</label>
+							<div class="col-xs-12 col-sm-6">
+								<?php echo form_error('email','<div class = "error">','</div>');?>
+								<input class="form-control" type="email" name="email" value="<?php echo set_value('email');?>"><br>
+							</div>
+						</div>
+							<center><input type="submit" value="enviar"><center>
+					</form>
+				</div>
+			</div>
+	</div>
+<?php $this->load->view('plantilla3HerAdmin/footer'); ?>

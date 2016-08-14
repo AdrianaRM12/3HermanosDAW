@@ -1,19 +1,40 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Producto extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Producto_model');
         $this->load->helper('form');
     }
-    
+	
 
-//------------------------------------------Obtener producto----------------------------//
+
+//------------------------------------------Obtener productos----------------------------//
     public function getProducto($id = null){
         $data['producto'] = $this->Producto_model->getProducto($id);
-        $this->load->view('admin/producto/producto',$data);
+      
+	
+		$this->load->helper('url');
+		$this->benchmark->mark('inicio');
+		$pages=3; //registros a mostrar por página 
+		$this->load->library('pagination');
+		$config['base_url']=base_url() . 'index.php/producto/getProducto';
+		$config['total_rows']= $this->Producto_model->filas();
+		$config['per_page']= $pages;
+		$config['num_links']=3;
+		//$config['first_link']='Primero';
+		$this->pagination->initialize($config);
+		
+		
+		$data['producto']=$this->Producto_model->pag($config['per_page'],$this->uri->segment(3));
+		
+		$this->load->view('admin/producto/producto', $data);
+		$this->benchmark->mark('fin');
+		
+		
     }
+	
+	
     
 //------------------------------------------Agregar producto----------------------------//
     public function agrCalzado(){
@@ -22,6 +43,19 @@ class Producto extends CI_Controller {
     
 
     public function addCalzado(){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required|is_unique[calzado.Nombre]');
+	$this->form_validation->set_rules('precio','Precio','trim|required|numeric');
+	$this->form_validation->set_rules('categoria','Categoria','trim|required|numeric');
+	$this->form_validation->set_rules('stock','Stock','trim|required|numeric');
+	$this->form_validation->set_rules('marca','Marca','trim|required|numeric');
+	
+	
+	
+		if($this->form_validation->run() === false){
+			$this->load->view('admin/Producto/agrCalzado');
+		
+		}else{
         $n = $this->input->post('nombre');
         $p = $this->input->post('precio');
         $d = $this->input->post('descripcion');
@@ -35,7 +69,8 @@ class Producto extends CI_Controller {
         //$this->getProducto();
         redirect('producto/getProducto');
         
-    }
+		}
+	}
  //------------------------------------------Actualizar producto----------------------------//
   public function UpProducto($id=null){
         
@@ -47,6 +82,19 @@ class Producto extends CI_Controller {
  
  
     public function actProducto(){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required');
+	$this->form_validation->set_rules('precio','Precio','trim|required|numeric');
+	$id = $this->input->post('id');
+
+	
+		if($this->form_validation->run() === false){
+		
+			$data['producto']= $this->Producto_model->getProducto($id);
+			$this->load->view('admin/Producto/UpProducto', $data);
+		
+		}else{
+		
 		$id = $this->input->post('id');
         $n = $this->input->post('nombre');
         $p = $this->input->post('precio');
@@ -60,21 +108,19 @@ class Producto extends CI_Controller {
        redirect('producto/getProducto');
 	  
         
+		}
     }
-    
    
     
 //------------------------------------------Eliminar producto----------------------------//
     public function delProducto($id){
         $this->Producto_model->delProducto($id);
         
-		
-		
         redirect('producto/getproducto');
 		
     }
     
-  
+ //------------------------------------------Login----------------------------//
     
     public function login(){
         $user = $this->input->post('username');
@@ -111,13 +157,30 @@ class Producto extends CI_Controller {
                 $this->session->set_userdata($user_array);
                 redirect('Usuario/index');
     }
+	
+//------------------------------------------Reportes XML producto----------------------------//
+
+	public function generarXML(){
+		$reporte = $this->input->post('reporteP');//aqui resive lo del formulario 
+		$xml = $this->Producto_model->reporteProd();
+		$this->load->helper('download');//son ayudas son funciones que ya estan programadas
+		$reporte .='.xml';
+		force_download('ReporteCalzado', $xml);
+	}
+	
+
+
+//------------------------------------------Reportes EXCEL producto----------------------------//
+
+	public function generarEXCEL(){
+		$this->load->helper('mysql_to_excel');
+		to_excel($this->Producto_model->generarEXCEL(),"ReporteCalzado");
+	
+	}
+
+
+
 }
-
-
-
-
-
-
 
 
 

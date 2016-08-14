@@ -21,6 +21,16 @@ class Vendedor extends CI_Controller {
     
 
     public function addVendedor(){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required|is_unique[vendedor.Nombre]');
+	
+
+	
+		if($this->form_validation->run() === false){
+			$this->load->view('admin/vendedor/agrVendedor');
+		
+		}else{
+	
         $nom = $this->input->post('nombre');
        
         $this->Vendedor_model->addVendedor($nom);
@@ -28,7 +38,8 @@ class Vendedor extends CI_Controller {
 
         redirect('vendedor/getVendedor');
         
-    }
+		}
+	}
 //------------------------------------------Actualizar vendedor----------------------------//
   public function actVendedor($id=null){
         
@@ -39,7 +50,18 @@ class Vendedor extends CI_Controller {
     }
  
  
-    public function upVendedor(){
+    public function upVendedor($id=null){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required');
+	$id = $this->input->post('id');
+	
+		if($this->form_validation->run() === false){
+			$data['vendedor']= $this->Vendedor_model->getVendedor($id);
+			$this->load->view('admin/vendedor/frmUpVendedor', $data);
+		
+		}else{
+	
+	
 		$id = $this->input->post('id');
         $nom = $this->input->post('nombre');
        
@@ -49,7 +71,8 @@ class Vendedor extends CI_Controller {
        redirect('vendedor/getVendedor');
 	  
         
-    }
+		}
+	}
 //------------------------------------------Eliminar vendedor----------------------------//
     public function delVendedor($id){
         $this->Vendedor_model->delVendedor($id);

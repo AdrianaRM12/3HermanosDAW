@@ -10,6 +10,7 @@ class Producto_model extends CI_Model{
     public function getProducto($id = null){
         $this->db->select('*');
         $this->db->from('calzado');
+		$this->db->order_by('nombre','asc');
         if($id != null){
             $this->db->where('id_Calzado', $id);
         }
@@ -21,6 +22,31 @@ class Producto_model extends CI_Model{
             return $sql->result();
         }
     }
+
+	
+//------------------------------------------Paginacion del calzado----------------------------//
+ 
+
+	public function pag($pag, $segmento){
+		
+			$sql=$this->db->get('calzado', $pag,$segmento);
+			if($sql->num_rows()>0){
+				foreach ($sql->result() as $f){
+					$data[] = $f;
+		}
+		return $data;
+		
+		}
+	
+	}	
+	
+	public function filas(){
+	
+		$sql = $this->db->get('calzado');
+		return $sql->num_rows();
+	}
+		
+
  //------------------------------------------Agregar producto----------------------------//
     public function addCalzado($n, $p, $d, $c, $s, $m){
         
@@ -59,6 +85,10 @@ class Producto_model extends CI_Model{
     public function delProducto($id){
         $this->db->where('id_Calzado', $id);
         $this->db->delete('calzado');
+		echo
+		'<script>
+			alert "Eliminado";
+		</script>';
 		
     }
     
@@ -77,6 +107,35 @@ class Producto_model extends CI_Model{
             return null;
         }
     }
+	
+	
+ 
+//------------------------------------------Reportes ----------------------------// 
+
+	public function reporteProd(){
+			$this->load->dbutil();
+			
+			$consulta = $this->db->get('calzado');
+			
+			$config = array (//el nombre que se utilice aqui tambien ira en el xml --->
+				'root' => 'Calzado',
+				'element' => 'calzado',
+				'newline' => "\n",
+				'tab'  => "\t"
+			);
+			
+			$xml = $this->dbutil->xml_from_result($consulta, $config);//<----
+			return $xml;
+			
+			
+		}
+		
+	public function generarEXCEL(){
+		$fields = $this->db->field_data('calzado');
+		$query =$this->db->get('calzado');	
+		return array("fields" => $fields, "query" => $query);
+	}
+	
 }//Fin class
 
 

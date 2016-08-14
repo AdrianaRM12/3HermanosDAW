@@ -11,19 +11,34 @@ class Usuario extends CI_Controller {
     public function index(){
         $this->load->view('admin/usuarios/frmLogin');
     }
+	
+	
+	
  //------------------------------------------Obtener usuario----------------------------//
     public function getUsuario($id = null){
         $data['usuario'] = $this->Usuario_model->getUsuario($id);
         $this->load->view('admin/usuarios/usuario',$data);
     }
+	
+//------------------------------------------Agregar usuario----------------------------//
     
     public function frmUsuario(){
-        $this->load->view('frmUsuario');
+        $this->load->view('admin/usuarios/frmUsuario');
     }
- //------------------------------------------Agregar usuario----------------------------//
+ 
     public function addUsuario(){
+	
+	$this->form_validation->set_rules('username','Usuario','trim|required');
+	$this->form_validation->set_rules('password','Contraseña','trim|required');
+	$this->form_validation->set_rules('email','Correo','trim|required');
+	
+		if($this->form_validation->run() === false){
+			$this->load->view('admin/usuarios/frmUsuario');
+		
+		}else{
         $u = $this->input->post('username');
-        $p = $this->input->post('password');
+        $pa = $this->input->post('password');
+		$p = $this->encrypt->encode($pa);
         $e = $this->input->post('email');
         
         $this->Usuario_model->addUsuario($u, $p, $e);
@@ -31,27 +46,48 @@ class Usuario extends CI_Controller {
         //$this->getUsuario();
         redirect('usuario/getUsuario');
         
-    }
+		}
+	}
  //------------------------------------------Actualizar usuario----------------------------//
-    public function upUsuario(){
+     public function frmUpUsuario($id=null){
+        
+        $data['usuario']= $this->Usuario_model->getUsuario($id);
+        
+        $this->load->view('admin/usuarios/frmUpUsuario', $data);
+        
+    }
+	
+	public function upUsuario($id=null){
+	$this->form_validation->set_rules('username','Usuario','trim|required');
+	$this->form_validation->set_rules('password','Contraseña','trim|required');
+	$this->form_validation->set_rules('email','Correo','trim|required');
+	$id = $this->input->post('id');
+	
+		if($this->form_validation->run() === false){
+			$data['usuario']= $this->Usuario_model->getUsuario($id);
+        
+			$this->load->view('admin/usuarios/frmUpUsuario', $data);
+		
+        
+		}else{
+	
+		
         $i = $this->input->post('id');
         $u = $this->input->post('username');
-        $p = $this->input->post('password');
+        $pa = $this->input->post('password');
+			$p = $this->encrypt->encode($pa);
         $e = $this->input->post('email');
+		
+		
         
         $this->Usuario_model->upUsuario($i, $u, $p, $e);
         
         redirect('usuario/getUsuario');
         
-    }
+		}
+	}
     
-    public function frmUpUsuario($id=null){
-        
-        $data['usuario']= $this->Usuario_model->getUsuario($id);
-        
-        $this->load->view('frmUpUsuario', $data);
-        
-    }
+   
     
 //------------------------------------------Eliminar usuario----------------------------//
     public function delUsuario($id){
@@ -70,26 +106,51 @@ class Usuario extends CI_Controller {
    
 //------------------------------------------Login administrador----------------------------//   
     public function login(){
-        $user = $this->input->post('username');
-        $pass = $this->input->post('password');
+	$this->form_validation->set_rules('username','Usuario','trim|required');
+	$this->form_validation->set_rules('password','Contraseña','trim|required');
+	
+		if($this->form_validation->run() === false){
+			
+			$this->load->view('admin/usuarios/frmLogin');
+		
+		}else{
+		
+			$user = $this->input->post('username');
+			$pass = $this->input->post('password');
         
-        $usuario = $this->Usuario_model->login($user, $pass);
+			$usuario = $this->Usuario_model->login($user, $pass);
         
         if($usuario){
+			
             $user_array = array(
                     'idUsuario' => $usuario->idUsuario,
                     'username' => $usuario->username,
+					'privilegios' =>$usuario->uStatus,
+					
                     'autentificado' => TRUE
                 );
+				$lo=$usuario->uStatus;
             $this->session->set_userdata($user_array);
-            redirect('usuario/logueado');
+			
+		if($lo == 1){
+			redirect('usuario/logueado');
+		}else{
+		redirect('usuario/entrar');
+		}
+		
+            
         }else{
-           redirect('Usuario/index'); 
+			
+			redirect('Usuario');
+			
         }
-    }
-    
+		}
+		
+	}
+		
     public function logueado(){
         if($this->session->userdata('autentificado')){
+			$data ['calendario'] = $this->calendar->generate();
             $data['nombre'] = $this->session->userdata('username');
             $this->load->view('admin/logueado', $data);
         }else{
@@ -98,34 +159,15 @@ class Usuario extends CI_Controller {
     }
 	
 	
-//------------------------------------------Login cajero----------------------------//  
 
-
-    public function loginCajero(){
-        $user = $this->input->post('username');
-        $pass = $this->input->post('password');
-        
-        $usuario = $this->Usuario_model->login($user, $pass);
-        
-        if($usuario){
-            $user_array = array(
-                    'idUsuario' => $usuario->idUsuario,
-                    'username' => $usuario->username,
-                    'autentificado' => TRUE
-                );
-            $this->session->set_userdata($user_array);
-            redirect('usuario/entrar');
-        }else{
-           redirect('Usuario/index'); 
-        }
-    }
-    
    public function entrar(){
         if($this->session->userdata('autentificado')){
+			$data ['calendario'] = $this->calendar->generate();
             $data['nombre'] = $this->session->userdata('username');
-            $this->load->view('entrar', $data);
+            $this->load->view('cajero/entrar', $data);
+			
         }else{
-            redirect('Usuario/index');
+            redirect('Controlador/logCajero');
         }
     }
 	
@@ -135,7 +177,7 @@ class Usuario extends CI_Controller {
                 'autentificado' => FALSE
                 );
                 $this->session->set_userdata($user_array);
-                redirect('Controlador');
+                redirect('Usuario/index');
     }
 }
 

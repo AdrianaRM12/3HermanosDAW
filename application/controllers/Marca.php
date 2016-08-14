@@ -21,6 +21,15 @@ class Marca extends CI_Controller {
     
 
     public function addMarca(){
+	
+
+	$this->form_validation->set_rules('nombre','Nombre','trim|required|is_unique[marca.Nombre]');
+
+	
+		if($this->form_validation->run() === false){
+			$this->load->view('admin/marca/agrMarca');
+		
+		}else{
         $nom = $this->input->post('nombre');
        
         $this->Marca_model->addMarca($nom);
@@ -28,7 +37,8 @@ class Marca extends CI_Controller {
 
         redirect('marca/getMarca');
         
-    }
+		}
+	}
 //------------------------------------------Actualizar cajero----------------------------//
   public function actMarca($id=null){
         
@@ -39,7 +49,17 @@ class Marca extends CI_Controller {
     }
  
  
-    public function upMarca(){
+    public function upMarca($id=null){
+	
+	$this->form_validation->set_rules('nombre','Nombre','trim|required');
+	$id = $this->input->post('id');
+	
+		if($this->form_validation->run() === false){
+			$data['marca']= $this->Marca_model->getMarca($id);
+			$this->load->view('admin/marca/frmUpMarca', $data);
+		
+		}else{
+	
 		$id = $this->input->post('id');
         $nom = $this->input->post('nombre');
        
@@ -49,9 +69,11 @@ class Marca extends CI_Controller {
        redirect('marca/getMarca');
 	  
         
-    }
+		}
+	}
 //------------------------------------------Eliminar cajero----------------------------//
     public function delMarca($id){
+
         $this->Marca_model->delMarca($id);
         
 		
